@@ -1,0 +1,82 @@
+Automation of commands using shell scripts
+Once you have become used to basic commands and finding your way around a
+Linux system you may want to automate tasks which are executed frequently. This
+can be done with shell scripts – lists of commands to run in sequence. This is a
+simple but powerful form of programming which with loops and conditional
+statements allows complex sequences of commands to be run, saving much time.
+9.1 Basic shell script
+Create and edit a file called test.sh:
+#!/bin/bash
+echo “Hello $USER”
+The line at the beginning is called a shebang, sha-bang, hashbang, pound-bang or
+hash-pling and tells the computer that the script should be run in a bash shell. The
+script knows that everything beginning with a dollar sign ($) is a variable and will use
+the value of the environment variable $USER (see section 7.2)
+Once you have finished editing the file, close the editor and make the file executable
+with ‘chmod’, which you used in section 5.2
+chmod +x test.sh
+Before you run the script, what do you think the output will be?
+Now run the script:
+./test.sh
+9.2 Using variables
+As well as using environment variables, new variables can created and used within
+your script. The example below uses a new variable, NUMLOGINS.
+Note that you do not need to use the dollar sign when you create the variable, only to
+refer to it once it has been created. The $( command ) construct is used in this
+instance to pass the output of a command or commands and assign the value to the
+new variable.
+University of Leicester | Tutorial Nine 39
+#!/bin/bash
+echo “Hello $USER”
+NUMLOGINS=$(who | grep $USER | wc -l)
+echo “You have $NUMLOGINS login sessions”
+9.3 Looping with ‘for’
+Rather than simply process a sequence of commands one after the other, loops can
+perform the same commands for different variables. The example below uses the
+variable $user which is set up at the beginning of the ‘for’ loop. Note that this is not
+the same as the $USER environment variable as variable names are case sensitive.
+#!/bin/bash
+for user in gg78 ljg2 root
+do
+ NUMLOGINS=$(who | grep $user | wc –l)
+ echo “$user has $NUMLOGINS sessions”
+done
+The script loops over the section between ‘do’ and ‘done’ once for each value of
+$user specified by the line beginning with ‘for’.
+Numbers can be used instead of variables in the loop so that the script can keep
+track of which number loop it is on:
+#!/bin/bash
+for i in 1 2 3 4 5
+do
+ echo “loop $i”
+done
+If the script needs to loop a lot of times, this notation can be used:
+for i in {1..20}
+This will loop 20 times with the value of $i incrementing by 1 each time. If
+incrementing by a value other than 1 is required then use the ‘seq’ command, eg:
+for i in $(seq 0 0.5 4)
+This will give values for $i from 0 to 4, incrementing by 0.5
+University of Leicester | Tutorial Nine 40
+9.4 Conditional statements
+“if / then / else” statements allow conditional branching within a script. This script
+tests the value of a variable and then decides which branch to take (and therefore
+what to output), depending on that value.
+#!/bin/bash
+NUMLOGINS=$(who | grep $USER | wc –l)
+if [ $NUMLOGINS -gt 1 ]
+then
+ echo "$USER is logged in with at least 2 sessions"
+else
+ echo "$USER has less than 2 sessions"
+fi
+The ‘if … then … else’ statement must be finished with ‘fi’. The ‘else’ option is
+optional – the script will carry on past ‘fi’ if you do not use it.
+‘-gt’ is short for ‘greater than’. Other tests include:
+ -eq is equal to
+ -ne is not equal to
+ -ge is greater than or equal to
+ -lt is less than
+ -le is less than or equal to
+Exercise
+Write a script which will test how many logins you and the ‘root’ user have and tell
+you who has the most (or if equal)
