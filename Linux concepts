@@ -1,0 +1,245 @@
+Listing files in Linux
+ls 
+ls -a
+l
+
+Creating and accessing directories
+mkdir <directory>
+cd ~
+cd ..
+cd
+
+Home directories and path names
+pwd
+
+
+Shell shortcuts for Bash
+Ctrl-A (jump to start of line)
+Ctrl-E (jump to end of line)
+Ctrl-K (delete (kill) everything from the cursor onwards
+Ctrl-W (delete the previous word only)
+Ctrl-Y (paste whatever was just deleted)
+Ctrl-C (kill/exit a running process)
+Ctrl-L (clear the screen)
+Ctrl-R (search for previously executed commands)
+Tab (auto-complete command or file/directory name)
+↑ / ↓ (scroll back / forwards through previously entered commands)
+
+=============
+Copy Files and directories
+cp
+cp -R
+
+move and rename files
+mv
+
+remove files and directories
+rm 
+
+Displaying the contents of a file on the screen
+cat
+clear
+less
+head 
+tail
+
+Searching the contents of a file
+less
+grep
+wc
+
+cp file1 file2 copy file1 and call it file2
+mv file1 file2 move or rename file1 to file2
+rm file remove a file
+rmdir directory remove a directory
+cat file Display or concatenate a file
+less file display a file a page at a time
+head file display the first few lines of a file
+tail file display the last few lines of a file
+grep 'keyword' file search a file for keywords
+wc file count number of lines/words/characters in file
+=============
+Redirection 
+Standard Input (STDIN) - Usually the keyboard
+ Standard Output (STDOUT) - Usually the Terminal
+ Standard Error (STDERR) - Usually the Terminal 
+
+Summary
+command > file redirect standard output to a file
+command 2> file redirect standard error to a file
+command >> file append standard output to a file
+command < file redirect standard input from a file
+command1 | command2 pipe the output of command1 to the input of command2
+cat file1 file2 > file0 concatenate file1 and file2 to file0
+sort sort data
+who list users currently logged in
+============
+
+Wildcards
+Filename conventions
+On-line Manuals
+
+* match any number of characters
+? match one character
+man command read the online manual page for a command
+whatis command brief description of a command
+apropos keyword match commands with keyword in their man pages
+
+===========
+Viewing file and directory permissions
+ls -l
+rwxrw-r—- 1 nye1 cc_staff 700 2008-07-27 20:45 file1
+
+Access rights on files
+ r (or -), indicates read permission (or otherwise), that is, the presence or
+absence of permission to read and copy the file
+ w (or -), indicates write permission (or otherwise), that is, the permission (or
+otherwise) to change a file
+ x (or -), indicates execution permission (or otherwise), that is, the permission to
+execute a file, where appropriate
+Access rights on directories
+ r allows users to list files in the directory;
+ w means that users may delete files from the directory or move files into it;
+ x means the right to access files in the directory. This implies that you may read
+files in the directory provided you have read permission on the individual files. 
+
+Changing access rights (chmod)
+Only the owner of a file can use chmod to change the permissions of a file. The options
+of chmod are as follows
+Symbol Meaning
+u user
+g group
+o other
+a all
+r read
+w write (and delete)
+x execute (and access directory)
++ add permission
+- take away permission
+
+========
+Processes and Jobs
+ps
+background processess
+Backgrounding a current foreground process
+Listing suspended and background processes
+jobs
+Killing a process
+ps (process status)
+
+s -lag list access rights for all files
+chmod [options] file change access rights for named file
+command & run command in background
+^C kill the job running in the foreground
+^Z suspend the job running in the foreground
+bg background the suspended job
+jobs list current jobs
+fg %1 foreground job number 1
+kill %1 kill job number 1
+ps list current processes
+kill 26152 kill process number 26152
+==========
+
+Other useful UNIX commands 
+quota
+On SPECTRE / ALICE all accounts are allocated a certain amount of disk space on
+the file system for personal files, up to 20GB. If you go over your quota, you cannot
+create any more files.
+To check your current quota and how much of it you have used, type
+quotacheck
+df
+du (disk usage)
+homeusage
+gzip
+file
+history
+find
+locate
+wget
+=======
+
+Variables
+Environment Variables
+echo $OSTYPE
+$USER - Your login name
+ $HOME - Path name of your home directory
+ $HOSTNAME - Name of the computer you are using
+ $PATH - Directories the shell searches to find commands
+ $SHELL – The shell you are using (should be bash!)
+
+Environment variables are displayed using the env command. To show all values of
+these variables, type
+env | less
+
+ Setting variables
+
+HISTSIZE=2000
+Check this has worked by typing
+echo $HISTSIZE
+
+
+However, this will only set the variable for the current shell - it will be lost once you log
+out. You should also be aware that the new value of the variable will
+1. Not be picked up by any forked processes, including sub-shells
+2. Not be picked up by any new sessions that you start
+To address the first issue, you can export the variable – this means that forked
+processes and sub-shells will inherit the variables,
+export HISTSIZE=2000
+To address the second issue (i.e to make the changes permanent) you will need to
+add the above command to your .bashrc file.
+First open the .bashrc file in nano (or another suitable text editor – (see appendices
+
+============
+
+First open the .bashrc file in nano (or another suitable text editor – (see appendices
+A.3 Opening a text editor (PuTTY/SSH) and A.4 Opening a text editor (NX) for more
+information)). If you have connected using PuTTY/SSH, use nano:
+nano ~/.bashrc
+Add the following line to your .bashrc file (it doesn’t matter where within the file as long
+as it’s on a line of its own):
+export HISTSIZE=2000
+Save the file and force the shell to reread its .bashrc file by using the shell source
+command:
+source ~/.bashrc
+University of Leicester | Tutorial Seven 30
+Alternatively you could log out and then start a new shell. Finally, check this has
+worked by typing
+echo $HISTSIZE
+
+=============
+
+Setting path
+When you type a command, your PATH variable defines in which directories the shell
+will look to find the command you typed. It is a colon-separated list of directories, and
+on SPECTRE can be very long, reflecting the number of applications and program
+modules you may have loaded.
+echo $PATH
+will show a long list of directories.
+If the system returns a message saying command: command not found, this indicates
+that either the command doesn't exist at all on the system or it is simply not in your
+path.
+For example, to run units which we will compile and install in Tutorial Eight you either
+need to directly specify the units path (~/units174/bin/units), or you need to have the
+directory ~/units174/bin in your path. Come back to the rest of Tutorial 7.4 once you
+have completed Tutorial Eight.
+You can add it to the end of your existing path (the $PATH represents this) by issuing
+the command:
+export PATH=$PATH:~/units174/bin
+Don’t forget the colon, which separates the existing list of directories from the one you
+are adding to the list.
+Test that this worked by trying to run units in any directory other than where units is
+actually located.
+cd; units
+HINT: You can run multiple commands on one line by separating them with a
+semicolon.
+To add this path permanently, add the following line to your .bashrc list of other
+commands.
+PATH=$PATH:~/units174/bin
+
+=================
+
+which
+=================
+
+Compiling software packages 
+
