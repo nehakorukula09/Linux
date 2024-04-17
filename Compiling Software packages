@@ -1,0 +1,187 @@
+Compiling Software packages:
+
+We have many public domain and commercial software packages installed on
+SPECTRE which are available to all users. However, users are allowed to download
+and install small software packages in their own home directory, software usually only
+useful to them personally.
+There are a number of steps needed to install the software.
+ Locate and download the source code (which is usually compressed)
+ Unpack the source code
+ Compile the code
+ Install the resulting executable
+ Set paths to the installation directory
+Of the above steps, probably the most difficult is the compilation stage.
+Compiling Source Code
+All high-level language code must be converted into a form the computer understands.
+For example, C language source code is converted into a one or more object files
+containing low-level machine code. The final stage in compiling a program involves
+linking the object files to libraries which contain certain built-in functions. This final
+stage produces an executable program, code which the computer’s CPU can execute
+directly.
+To do all these steps by hand is complicated and beyond the capability of the ordinary
+user. A number of utilities and tools have been developed for programmers and endusers to simplify these steps.
+make and the Makefile
+The make command allows programmers to manage large programs or groups of
+programs. It aids in developing large programs by keeping track of which portions of
+the entire program have been changed, compiling only those parts of the program
+which have changed since the last compile.
+The make program gets its set of compile rules from a text file called Makefile which
+resides in the same directory as the source files. It contains information on how to
+compile the software, e.g. the optimisation level, whether to include debugging info in
+the executable. It also contains information on where to install the finished compiled
+binaries (executables), manual pages, data files, dependent library files, configuration
+files, etc.
+University of Leicester | Tutorial Eight 33
+Some packages require you to edit the Makefile by hand to set the final installation
+directory and any other parameters. However, many packages are now distributed
+with the GNU configure utility.
+configure
+As the number of UNIX variants increased, it became harder to write programs which
+could run on all variants. Developers frequently did not have access to every system,
+and the characteristics of some systems changed from version to version. The GNU
+configure and build system simplifies the building of programs distributed as source
+code. All programs are built using a simple, standardised, two-step process. The
+program builder need not install any special tools in order to build the program.
+The configure shell script attempts to guess correct values for various systemdependent variables used during compilation. It uses those values to create a
+Makefile in each directory of the package.
+The simplest way to compile a package is:
+1. cd to the directory containing the package's source code.
+2. Type ./configure to configure the package for your system.
+3. Type make to compile the package.
+4. Optionally, type make check to run any self-tests that come with the package.
+5. Type make install to install the programs and any data files and
+documentation.
+6. Optionally, type make clean to remove the program binaries and object files
+from the source code directory
+The configure utility supports a wide variety of options. There is usually a help option
+available to get a list of interesting options for a particular configure script.
+./configure --help
+The only generic options you are likely to use are the --prefix and --exec-prefix options.
+These options are used to specify the installation directories.
+The directory named by the --prefix option will hold machine independent files such as
+documentation, data and configuration files.
+The directory named by the --exec-prefix option, (which is normally a subdirectory of
+the --prefix directory), will hold machine dependent files such as executables.
+8.2 Downloading source code
+For this example, we will download a piece of free software that converts between
+different units of measurements.
+First create a new directory then copy the software and save it to your new directory.
+University of Leicester | Tutorial Eight 34
+mkdir download
+cd download
+cp /cm/shared/training/tutorial/units-1.74.tar.gz .
+8.3 Extracting the source code
+Make sure you are within the download directory and list the contents.
+cd ~/download
+ls -l
+As you can see, the filename ends in .tar.gz. This is a common file format for
+distributing software packages in source form. It comprises a tar file which has been
+compressed with gzip (tar.gz files are often called tarballs). A tar file is a collection of
+directories and files packaged as a single file with the tar command. Sometimes files
+of this type are named ending with .tgz
+First uncompress the file using the gunzip command. This will create a .tar file.
+gunzip units-1.74.tar.gz
+Then extract the contents of the tar file.
+tar -xvf units-1.74.tar
+Alternatively the two steps can combined into a single command:
+tar -zxvf units-1.74.tar.gz
+Notice the extra -z flag. This instructs tar to gunzip the file before unpacking the
+archive. Again, list the contents of the download directory, then go to the units-1.74
+sub-directory.
+cd units-1.74
+8.4 Configuring the package
+The first thing to do is carefully read the README and INSTALL text files (use the
+less command). These contain important information on how to compile and run the
+software.
+The units package uses the GNU configure system to compile the source code. We
+will need to specify the installation directory, since the default will be the main system
+area which you will not have write permissions for. We need to create an install
+directory in your home directory. 
+University of Leicester | Tutorial Eight 35
+mkdir ~/units174
+Then run the configure utility setting the installation path to this.
+./configure --prefix=$HOME/units174
+If configure has run correctly, it will have created a Makefile with all necessary options.
+You can view the Makefile if you wish (use the less command), but do not edit the
+contents of this.
+8.5 Building the package
+Now you can go ahead and build the package by running the make command.
+make
+After a minute or two (depending on the speed of the computer), the executables will
+be created. You can check to see everything compiled successfully by typing
+make check
+If everything is okay, you can now install the package.
+make install
+This will install the files into the ~/units174 directory you created earlier. It is
+important to realize that while the
+./configure
+make
+make check
+make install
+sequence is extremely common, it is not a standard and there is no absolute guarantee
+that software will install this way. However, the make command is a standard Linux
+command which reads in a user written file (the makefile) that describes how to build
+and install software. If you are writing your own software (and in particular if you are
+distributing your software) you should look to use the make command - although its
+use is beyond the scope of this course. The configure command is more in-depth still
+and will create a makefile for a given system from a template file, you will probably not
+need to create your own configure scripts unless you are working on developing a very
+large software application and intended to distribute it widely.
+University of Leicester | Tutorial Eight 36
+8.6 Running the software
+You are now ready to run the softwar
+
+ Running the software
+You are now ready to run the software (assuming everything worked).
+cd ~/units174
+If you list the contents of the units directory, you will see a number of subdirectories.
+bin The binary executables
+info GNU info formatted documentation
+man Man pages
+share Shared data files
+To run the program, change to the bin directory and type
+./units
+You have: 6 feet
+You want: metres
+* 1.8288
+/ 0.54680665
+(ctrl-d to exit)
+If you get the answer 1.8288, congratulations, it worked. To view what units it can
+convert between, view the data file in the share directory (the list is quite
+comprehensive). To read the full documentation, change into the info directory and
+type
+info --file=units.info
+8.7 Stripping unnecessary code
+When a piece of software is being developed, it is useful for the programmer to include
+debugging information into the resulting executable. This way, if there are problems
+encountered when running the executable, the programmer can load the executable
+into a debugging software package and track down any software bugs.
+This is useful for the programmer, but unnecessary for the user. We can assume that
+the package, once finished and available for download has already been tested and
+debugged. However, when we compiled the software above, debugging information
+was still compiled into the final executable. Since it is unlikely that we are going to
+need this debugging information, we can strip it out of the final executable. One of the
+advantages of this is a much smaller executable, which should run slightly faster.
+What we are going to do is look at the before and after size of the binary file. First
+change into the bin directory of the units installation directory.
+University of Leicester | Tutorial Eight 37
+cd ~/units174/bin
+ls -l
+As you can see, the file is over 100kB in size. You can get more information
+on the type of file by using the file command.
+file units
+units: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), for GNU/Linux
+2.6.4, dynamically linked (uses shared libs), not stripped
+To strip all the debug and line numbering information out of the binary file, use the strip
+command
+strip units
+ls -l
+As you can see, the file is now 45 kB – less than half its original size. Half of the binary
+file was debug code! Check the file information again.
+file units
+units: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), for GNU/Linux
+2.6.4, dynamically linked (uses shared libs), stripped
+Notice now that the file is stripped.
+University of Leicester | Tutorial Nine 38
+Tutorial Nine
+Automation of comm
