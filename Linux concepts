@@ -1,10 +1,35 @@
 Listing files in Linux
-ls 
-ls -a
-l
 
+ls : displays all the files in current working directory
+postgres@ip-172-31-81-195:~$ ls
+12  14	user_permissions.sql
+
+ls -l : displays all the files in current working directory along with permissions and more details about files.
+postgres@ip-172-31-81-195:~$ ls -l
+total 12
+drwxr-xr-x 3 postgres postgres 4096 Mar 29 00:20 12
+drwxr-xr-x 3 postgres postgres 4096 Mar 29 00:18 14
+-rw-rw-r-- 1 postgres postgres 1653 Apr 10 20:58 user_permissions.sql
+
+ls -a : displays all the files in current working directory along with hidden files.
+postgres@ip-172-31-81-195:~$ ls -a
+.  ..  .bash_history  .lesshst	.psql_history  .viminfo  12  14  user_permissions.sql
+
+ls -l <>specific directory<> : Listing files in a specific directory.
+postgres@ip-172-31-81-195:~$ ls -l /var/lib/postgresql/
+total 12
+drwxr-xr-x 3 postgres postgres 4096 Mar 29 00:20 12
+drwxr-xr-x 3 postgres postgres 4096 Mar 29 00:18 14
+-rw-rw-r-- 1 postgres postgres 1653 Apr 10 20:58 user_permissions.sql
+
+==========================================================================================
 Creating and accessing directories
+
 mkdir <directory>
+postgres@ip-172-31-81-195:~$ mkdir sample_dir
+postgres@ip-172-31-81-195:~$ ls -ld sample_dir/
+drwxrwxr-x 2 postgres postgres 4096 Apr 17 21:32 sample_dir/
+
 cd ~
 cd ..
 cd
@@ -14,6 +39,7 @@ pwd
 
 
 Shell shortcuts for Bash
+
 Ctrl-A (jump to start of line)
 Ctrl-E (jump to end of line)
 Ctrl-K (delete (kill) everything from the cursor onwards
