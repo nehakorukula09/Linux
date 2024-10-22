@@ -267,5 +267,13 @@ PATH=$PATH:~/units174/bin
 which
 =================
 
-Compiling software packages 
+rsync 
+rsync -av --progress -e "ssh -i <.pem key>" source target-user@target-host:/target-destination
+
+=================
+Navigation:
+Ctrl+a -> start of line
+Ctrl+e -> end of line
+Alt+F -> move one word forward
+Alt+B -> move one word back
 
